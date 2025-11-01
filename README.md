@@ -115,11 +115,6 @@ This repository supports various stages of the DevOps lifecycle:
 - **Operate** - Monitoring, logging, and operational scripts
 - **Monitor** - Observability and monitoring setup scripts
 
-## 📚 Additional Resources
-
-- [db_scripts Documentation](db_scripts/README.md) - Detailed database setup instructions
-- Check individual script headers for usage examples and parameters
-
 ## 📄 License
 
 [Specify your license here - e.g., MIT, Apache 2.0, etc.]
