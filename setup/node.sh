@@ -1,37 +1,34 @@
 #!/bin/bash
+
 set -e
 
-echo "=== Step 1: Install dependencies gnupg and curl ==="
-sudo apt-get update
-sudo apt-get install -y gnupg curl
+# ==========================
+#  Node.js Installation Script (Debian/Ubuntu)
+#  Installs latest LTS from NodeSource
+# ==========================
 
-echo "=== Step 2: Import MongoDB GPG key ==="
-curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-   sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+echo ">>> Updating packages..."
+sudo apt update -y
+sudo apt upgrade -y
 
-echo "=== Step 3: Add MongoDB APT repository ==="
-echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.2 multiverse" \
-   | sudo tee /etc/apt/sources.list.d/mongodb-org-8.2.list
+echo ">>> Installing required dependencies..."
+sudo apt install -y curl ca-certificates gnupg
 
-echo "=== Step 4: Update package list ==="
-sudo apt-get update
+# ==========================
+# Add NodeSource LTS Repo
+# ==========================
+NODE_VERSION="18"   # Change to 20 or another version if you want
 
-echo "=== Step 5: Install MongoDB ==="
-sudo apt-get install -y mongodb-org
+echo ">>> Adding NodeSource repository for Node.js $NODE_VERSION.x..."
+curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
 
-echo "=== Step 6: Start MongoDB service ==="
-sudo systemctl start mongod
+echo ">>> Installing Node.js..."
+sudo apt install -y nodejs
 
-echo "=== Step 7: Reload systemd daemon ==="
-sudo systemctl daemon-reload
+echo ">>> Checking installation..."
+node -v
+npm -v
 
-echo "=== Step 8: Check MongoDB service status ==="
-sudo systemctl status mongod --no-pager
+sudo npm install -g pm2
 
-echo "=== Step 9: Enable MongoDB to start on boot ==="
-sudo systemctl enable mongod
-
-echo "=== Step 10: Restart MongoDB service ==="
-sudo systemctl restart mongod
-
-echo "=== MongoDB installation completed successfully ==="
+echo ">>> Node.js installation completed successfully!"
