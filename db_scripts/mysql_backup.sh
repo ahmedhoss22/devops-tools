@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# ==========================
+# MySQL Database Backup
+# ==========================
+# Usage:
+#   ./mysql_backup.sh <DB_NAME> <DB_USER> <DB_PASS> <FILENAME>
+# Example:
+#   ./mysql_backup.sh lms_dev_user lms_user 'lms_p$$ass' backup_20240101.sql
+# ==========================
+
+# Exit if any command fails
+set -e
+
+# Check arguments
+if [ "$#" -lt 4 ]; then
+  echo "❌ Usage: $0 <db_name> <db_user> <db_pass> <filename>"
+  exit 1
+fi
+
+DB_NAME=$1
+DB_USER=$2
+DB_PASS=$3
+FILENAME=$4
+
+# Validate filename
+if [ -z "$FILENAME" ]; then
+  echo "❌ Filename cannot be empty"
+  exit 1
+fi
+
+# Add .sql extension if not present
+if [[ ! "$FILENAME" =~ \.sql$ ]]; then
+  FILENAME="${FILENAME}.sql"
+fi
+
+echo "🚀 Starting MySQL backup for database '${DB_NAME}'..."
+
+# Perform backup
+mysqldump -u "${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" > "${FILENAME}"
+
+if [ $? -eq 0 ]; then
+  echo "✅ Backup completed successfully: ${FILENAME}"
+  echo "📦 Backup size: $(du -h "${FILENAME}" | cut -f1)"
+else
+  echo "❌ Backup failed!"
+  exit 1
+fi
+
