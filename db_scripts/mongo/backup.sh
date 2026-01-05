@@ -49,7 +49,7 @@ mongodump --host localhost \
           --db "${DB_NAME}" \
           --username "${DB_USER}" \
           --password "${DB_PASS}" \
-          --authenticationDatabase "${DB_NAME}" \
+          --authenticationDatabase "admin" \
           --out "${BACKUP_DIR}"
 
 if [ $? -eq 0 ]; then
